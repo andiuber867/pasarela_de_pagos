@@ -111,7 +111,7 @@ async function handleFormSubmit(e) {
   btnGenerate.disabled = true;
 
   try {
-    const response = await fetch('/api/generate-qr', {
+    const response = await fetch('/api?action=generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -156,7 +156,6 @@ function startPolling(qrId) {
   state.pollSeconds = 0;
   pollCounter.textContent = '0';
 
-  // Contador de segundos
   state.counterInterval = setInterval(() => {
     state.pollSeconds += 1;
     pollCounter.textContent = state.pollSeconds;
@@ -165,10 +164,7 @@ function startPolling(qrId) {
   // Consulta al banco cada 3 segundos
   state.pollInterval = setInterval(async () => {
     try {
-      let res = await fetch(`/api/check-status?qrId=${qrId}`);
-      if (!res.ok) {
-        res = await fetch(`/api/check-status/${qrId}`);
-      }
+      const res = await fetch(`/api?action=status&qrId=${qrId}`);
       if (!res.ok) return;
 
       const data = await res.json();
