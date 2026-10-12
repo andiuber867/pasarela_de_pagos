@@ -30,6 +30,7 @@ function banecoRequest(endpoint, method = 'GET', data = null, bearerToken = null
       port: 443,
       path: url.pathname + url.search,
       method: method,
+      rejectUnauthorized: false,
       headers: {
         'Accept': 'application/json',
         'User-Agent': 'PasarelaPagos/1.0.0'

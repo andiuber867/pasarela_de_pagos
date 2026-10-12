@@ -15,8 +15,14 @@ module.exports = async (req, res) => {
   }
 
   try {
-    // Tomar qrId de los query params
-    const qrId = req.query.qrId || (req.url.split('/').pop().split('?')[0]);
+    let qrId = null;
+    if (req.query && req.query.qrId) {
+      qrId = req.query.qrId;
+    } else {
+      const urlObj = new URL(req.url, 'http://localhost');
+      qrId = urlObj.searchParams.get('qrId') || urlObj.pathname.split('/').filter(Boolean).pop();
+      if (qrId === 'check-status') qrId = null;
+    }
 
     if (!qrId) {
       return res.status(400).json({
