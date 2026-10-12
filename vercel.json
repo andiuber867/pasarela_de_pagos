@@ -1,27 +1,25 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
+      "source": "/api/generate-qr",
+      "destination": "/api/generate-qr.js"
     },
     {
-      "src": "public/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/generate-qr",
-      "dest": "/api/generate-qr.js"
+      "source": "/api/check-status",
+      "destination": "/api/check-status.js"
     },
     {
-      "src": "/api/check-status/(.*)",
-      "dest": "/api/check-status.js?qrId=$1"
+      "source": "/api/check-status/:qrId",
+      "destination": "/api/check-status.js?qrId=:qrId"
     },
     {
-      "src": "/(.*)",
-      "dest": "/public/$1"
+      "source": "/",
+      "destination": "/public/index.html"
+    },
+    {
+      "source": "/:match*",
+      "destination": "/public/:match*"
     }
   ]
 }

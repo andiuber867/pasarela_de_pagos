@@ -165,7 +165,10 @@ function startPolling(qrId) {
   // Consulta al banco cada 3 segundos
   state.pollInterval = setInterval(async () => {
     try {
-      const res = await fetch(`/api/check-status?qrId=${qrId}`);
+      let res = await fetch(`/api/check-status?qrId=${qrId}`);
+      if (!res.ok) {
+        res = await fetch(`/api/check-status/${qrId}`);
+      }
       if (!res.ok) return;
 
       const data = await res.json();
