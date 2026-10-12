@@ -1,20 +1,19 @@
 const { checkQRStatus } = require('./banecoService');
 
 module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
-
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
-
+  // Manejo de errores global para atrapar el error exacto y devolverlo en JSON
   try {
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+    if (req.method === 'OPTIONS') {
+      res.writeHead(200);
+      res.end();
+      return;
+    }
+
     let qrId = null;
     if (req.query && req.query.qrId) {
       qrId = req.query.qrId;
@@ -25,19 +24,23 @@ module.exports = async (req, res) => {
     }
 
     if (!qrId) {
-      return res.status(400).json({
-        success: false,
-        message: 'Parámetro qrId es requerido'
-      });
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, message: 'Parámetro qrId es requerido' }));
+      return;
     }
 
     const result = await checkQRStatus(qrId);
-    return res.status(200).json(result);
-  } catch (error) {
-    console.error('Error verificando QR:', error);
-    return res.status(500).json({
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(result));
+  } catch (err) {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({
       success: false,
-      message: error.message || 'Error al verificar estado del QR'
-    });
+      diagnostics: {
+        errorName: err.name,
+        errorMessage: err.message,
+        errorStack: err.stack
+      }
+    }));
   }
 };
