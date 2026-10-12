@@ -4,8 +4,5 @@
   "description": "Pasarela de Pagos QR Banco Económico Bolivia",
   "scripts": {
     "start": "node local-server.js"
-  },
-  "keywords": ["pasarela", "qr", "bolivia", "baneco"],
-  "author": "Brandon Alexander Rodriguez Zeballos",
-  "license": "MIT"
+  }
 }

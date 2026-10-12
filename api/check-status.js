@@ -14,6 +14,14 @@ module.exports = async (req, res) => {
       return;
     }
 
+    const sendJson = (status, data) => {
+      if (res.status && typeof res.status === 'function') {
+        return res.status(status).json(data);
+      }
+      res.writeHead(status, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify(data));
+    };
+
     let qrId = null;
     if (req.query && req.query.qrId) {
       qrId = req.query.qrId;
@@ -24,15 +32,22 @@ module.exports = async (req, res) => {
     }
 
     if (!qrId) {
-      res.writeHead(400, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ success: false, message: 'Parámetro qrId es requerido' }));
-      return;
+      return sendJson(400, { success: false, message: 'Parámetro qrId es requerido' });
     }
 
     const result = await checkQRStatus(qrId);
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(result));
+    return sendJson(200, result);
   } catch (err) {
+    if (res.status && typeof res.status === 'function') {
+      return res.status(200).json({
+        success: false,
+        diagnostics: {
+          errorName: err.name,
+          errorMessage: err.message,
+          errorStack: err.stack
+        }
+      });
+    }
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({
       success: false,
