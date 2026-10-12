@@ -1,0 +1,6 @@
+node_modules
+.env
+.DS_Store
+*.log
+qr_prueba*.png
+mi_primer_qr*.png

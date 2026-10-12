@@ -1,0 +1,13 @@
+{
+  "name": "pasarela-pagos-baneco",
+  "version": "1.0.0",
+  "description": "Pasarela de Pagos QR Interoperable con Banco Económico de Bolivia (Compatible con Vercel)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["pasarela", "qr", "bolivia", "baneco", "pago-simple"],
+  "author": "Brandon Alexander Rodriguez Zeballos",
+  "license": "MIT"
+}
