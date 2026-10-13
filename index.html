@@ -3,89 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pasarela de Pagos QR | SaaS Banco Económico</title>
+  <title>Terminal de Pagos QR | Red Simple Interoperable</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <!-- Confetti para celebración bancaria -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 </head>
 <body>
 
-  <!-- Iluminación y Malla de Fondo -->
-  <div class="ambient-glow">
-    <div class="glow-orb glow-1"></div>
-    <div class="glow-orb glow-2"></div>
-  </div>
-  <div class="ambient-grid"></div>
+  <!-- Fondo Minimalista Ejecutivo -->
+  <div class="luxury-canvas"></div>
+  <div class="subtle-mesh"></div>
 
-  <!-- Barra de Navegación SaaS -->
-  <nav class="saas-navbar">
-    <div class="nav-brand">
-      <div class="brand-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <rect width="18" height="18" x="3" y="3" rx="2"/>
-          <path d="M7 7h.01M7 12h.01M7 17h.01M12 7h.01M12 12h.01M12 17h.01M17 7h.01M17 12h.01M17 17h.01"/>
-        </svg>
-      </div>
-      <div>
-        <span class="brand-title">PAGO SIMPLE</span>
-        <span class="brand-pill">SAAS MULTI-CLIENTE</span>
+  <!-- Navbar Ejecutiva -->
+  <header class="exec-navbar">
+    <div class="brand-wrapper">
+      <div class="brand-monogram">P</div>
+      <div class="brand-identity">
+        <h1>PAGO SIMPLE</h1>
+        <p>Terminal de Recaudación Directa</p>
       </div>
     </div>
 
-    <div class="nav-actions">
-      <!-- Selector de Cliente / Negocio -->
-      <div class="client-selector-wrap">
-        <span class="client-label">Cuenta:</span>
-        <select id="clientSelector" class="client-select">
+    <div class="nav-controls">
+      <!-- Selector de Empresa / Cliente -->
+      <div class="corporate-select-box">
+        <span class="select-indicator"></span>
+        <select id="clientSelector" class="account-dropdown">
           <option value="default" selected>Brandon Alexander (1001-730630)</option>
           <option value="demo">Comercio Demo S.R.L.</option>
         </select>
       </div>
 
-      <div class="live-badge">
-        <span class="live-pulse"></span>
-        <span>BANECO EN VIVO</span>
+      <div class="system-status-pill">
+        <span class="status-dot-active"></span>
+        <span>Banco Económico Oficial</span>
       </div>
     </div>
-  </nav>
+  </header>
 
-  <!-- Espacio de Trabajo Principal -->
-  <main class="saas-container">
+  <!-- Escenario Principal -->
+  <main class="main-stage">
     
-    <header class="hero-header">
-      <h2>Terminal de Cobros Instantáneos</h2>
-      <p>Genera códigos QR dinámicos con verificación automática en tiempo real interoperable con toda Bolivia.</p>
-    </header>
+    <div class="stage-hero">
+      <p class="kicker">Infraestructura de Pagos Digitales</p>
+      <h2>Terminal de Cobros QR</h2>
+      <p>Generación y verificación inmediata de pagos interoperables para empresas y comercios en Bolivia.</p>
+    </div>
 
-    <div class="workspace-grid">
+    <div class="terminal-layout">
       
-      <!-- Panel de Creación de Cobro -->
-      <section class="glass-panel">
-        <div class="panel-header">
-          <div class="header-icon-box">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="12" y1="1" x2="12" y2="23"/>
-              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-            </svg>
-          </div>
-          <div>
-            <h3 class="panel-title">Nuevo Cobro</h3>
-            <p class="panel-subtitle">Define el monto e inicia la pasarela</p>
-          </div>
+      <!-- Columna 1: Panel de Emisión de Cobro -->
+      <section class="elite-card">
+        <div class="card-topbar">
+          <h3>Emitir Nuevo Cobro</h3>
+          <span class="meta-badge">BOB / SIMPLE</span>
         </div>
 
-        <form id="paymentForm" class="form-stack">
-          
+        <form id="paymentForm" class="terminal-form">
           <div>
-            <div class="field-label">
-              <span>Monto a Cobrar</span>
-              <span class="tag">Moneda: BOB</span>
+            <div class="form-row-label">
+              <span>Importe Total</span>
+              <span>Moneda Nacional</span>
             </div>
-            <div class="amount-field-wrapper">
-              <span class="currency-symbol">Bs.</span>
+            <div class="amount-hero-input">
+              <span class="currency-mark">Bs.</span>
               <input 
                 type="number" 
                 id="amountInput" 
@@ -93,7 +76,7 @@
                 step="0.01" 
                 min="0.50" 
                 placeholder="0.00" 
-                class="amount-input"
+                class="clean-amount-field"
                 required 
                 autofocus
               >
@@ -101,146 +84,146 @@
           </div>
 
           <!-- Montos Rápidos -->
-          <div class="preset-chips">
-            <button type="button" class="chip-btn" data-val="5">Bs. 5</button>
-            <button type="button" class="chip-btn" data-val="10">Bs. 10</button>
-            <button type="button" class="chip-btn" data-val="25">Bs. 25</button>
-            <button type="button" class="chip-btn" data-val="50">Bs. 50</button>
-            <button type="button" class="chip-btn" data-val="100">Bs. 100</button>
+          <div class="quick-chips-row">
+            <button type="button" class="quick-chip" data-val="10">Bs. 10</button>
+            <button type="button" class="quick-chip" data-val="25">Bs. 25</button>
+            <button type="button" class="quick-chip" data-val="50">Bs. 50</button>
+            <button type="button" class="quick-chip" data-val="100">Bs. 100</button>
+            <button type="button" class="quick-chip" data-val="200">Bs. 200</button>
           </div>
 
           <div>
-            <div class="field-label">
-              <span>Concepto / Glosa</span>
+            <div class="form-row-label">
+              <span>Concepto o Referencia</span>
             </div>
             <input 
               type="text" 
               id="descInput" 
               name="description" 
-              placeholder="Ej. Cobro de servicio o venta #108" 
+              placeholder="Ej. Factura #842 o cobro de servicio" 
               value="Cobro de Servicio"
               maxlength="100"
-              class="text-input"
+              class="clean-text-field"
             >
           </div>
 
-          <!-- Resumen de Cuenta del Cliente Seleccionado -->
-          <div class="account-badge-box">
-            <div class="acc-info">
+          <!-- Cuenta de Destino -->
+          <div class="corporate-account-pill">
+            <div class="account-owner-text">
               <h5 id="displayClientName">BRANDON ALEXANDER RODRIGUEZ</h5>
-              <p id="displayBusinessName">Cuenta Receptora Activa</p>
+              <p id="displayBusinessName">Cuenta Receptora Habilitada</p>
             </div>
-            <div class="acc-number" id="displayAccountNumber">
+            <div class="account-mono-number" id="displayAccountNumber">
               1001-730630
             </div>
           </div>
 
-          <button type="submit" id="btnGenerate" class="btn-primary-action">
-            <span class="btn-text-content">Generar Código QR</span>
-            <div class="btn-loader-spinner"></div>
+          <button type="submit" id="btnGenerate" class="btn-solid-action">
+            <span class="action-label">Generar Código QR</span>
+            <div class="spinner-minimal"></div>
           </button>
         </form>
       </section>
 
-      <!-- Panel de Presentación Dinámica -->
-      <section class="glass-panel display-panel" id="displayPanel">
+      <!-- Columna 2: Monitor de Cobro en Vivo -->
+      <section class="elite-card display-stage" id="displayPanel">
 
-        <!-- Estado 1: Idle -->
-        <div class="view-state active" id="viewIdle">
-          <div class="idle-art">
-            <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <!-- Estado Inicial: Espera -->
+        <div class="state-pane active" id="viewIdle">
+          <div class="minimal-art-ring">
+            <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
               <rect width="18" height="18" x="3" y="3" rx="2"/>
               <path d="M9 9h6v6H9z"/>
               <path d="m15 9-6 6"/>
             </svg>
           </div>
-          <h4 class="idle-title">Esperando Parámetros</h4>
-          <p class="idle-desc">Ingresa un monto en el panel izquierdo para generar el código QR y comenzar la escucha bancaria.</p>
+          <h4 class="empty-headline">Terminal Lista</h4>
+          <p class="empty-subtext">Ingresa el importe a cobrar para emitir el código QR e iniciar el monitoreo de acreditación.</p>
         </div>
 
-        <!-- Estado 2: Esperando Pago (Láser y Polling Activo) -->
-        <div class="view-state" id="viewWaiting">
-          <div class="qr-stage">
-            <div class="scanning-pill">
-              <span class="radar-dot"></span>
-              ESCUCHANDO ACREDITACIÓN EN TIEMPO REAL
+        <!-- Estado Activo: QR + Escucha Bancaria -->
+        <div class="state-pane" id="viewWaiting">
+          <div class="qr-presentation-card">
+            <div class="waiting-pill-status">
+              <span class="pulse-node"></span>
+              <span>Monitoreando Transacción</span>
             </div>
 
-            <div class="qr-canvas-card">
-              <img id="qrImageElement" src="" alt="QR Banco Económico">
-              <div class="scanner-laser"></div>
+            <div class="qr-frame">
+              <img id="qrImageElement" src="" alt="QR Interoperable">
+              <div class="laser-bar"></div>
             </div>
 
-            <div class="amount-callout">
-              <div class="val" id="waitingAmount">Bs. 0.00</div>
-              <p class="desc" id="waitingDesc">Cobro de servicio</p>
+            <div>
+              <div class="waiting-amount-headline" id="waitingAmount">Bs. 0.00</div>
+              <p class="waiting-concept-sub" id="waitingDesc">Concepto del cobro</p>
             </div>
 
-            <p class="interop-banks-bar">
-              Acepta pagos desde <strong>cualquier banco de Bolivia</strong>: Baneco, BCP, BNB, Banco Sol, Unión, Ganadero, Fie o Billeteras Móviles.
+            <p class="interop-notice">
+              Escanea con <strong>cualquier banco de Bolivia</strong>: Baneco, BCP, BNB, Banco Sol, Unión, Ganadero, Fie o Billeteras Móviles.
             </p>
 
-            <div class="polling-badge">
-              <div class="polling-spinner"></div>
-              <span>Consultando core del banco... (<span id="pollCounter">0</span>s)</span>
+            <div class="polling-timer-badge">
+              <span>Verificando acreditación...</span>
+              <strong class="font-mono" id="pollCounter">0s</strong>
             </div>
 
-            <button type="button" class="btn-cancel-link" id="btnCancelQR">
+            <button type="button" class="btn-cancel-flat" id="btnCancelQR">
               Cancelar Cobro
             </button>
           </div>
         </div>
 
-        <!-- Estado 3: Éxito Verificado y Recibo -->
-        <div class="view-state" id="viewSuccess">
-          <div class="receipt-wrapper">
-            <div class="success-badge-top">
-              <div class="success-icon-bubble">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Estado Éxito: Verificado + Recibo -->
+        <div class="state-pane" id="viewSuccess">
+          <div class="receipt-card-panel">
+            <div class="receipt-verified-head">
+              <div class="verified-icon-circle">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="20 6 9 17 4 12"/>
                 </svg>
               </div>
-              <h3>¡Acreditado con Éxito!</h3>
-              <p>El banco confirmó la transferencia en la cuenta</p>
+              <h4>Pago Acreditado</h4>
+              <p>Fondos confirmados por la red bancaria</p>
             </div>
 
-            <div class="receipt-highlight-amount">
-              <span class="sym">Bs.</span>
-              <span class="num" id="receiptAmount">0.00</span>
+            <div class="receipt-amount-display">
+              <span class="cur">Bs.</span>
+              <span class="val" id="receiptAmount">0.00</span>
             </div>
 
-            <div class="receipt-details-card">
-              <div class="receipt-row">
-                <span class="label">Banco Pagador:</span>
-                <span class="val font-mono" id="receiptBank">Banco Interoperable</span>
+            <div class="receipt-data-table">
+              <div class="receipt-item">
+                <span class="k">Entidad Emisora:</span>
+                <span class="v font-mono" id="receiptBank">Banco Interoperable</span>
               </div>
-              <div class="receipt-row">
-                <span class="label">Titular que Pagó:</span>
-                <span class="val" id="receiptPayer">Cliente</span>
+              <div class="receipt-item">
+                <span class="k">Titular Pagador:</span>
+                <span class="v" id="receiptPayer">Cliente</span>
               </div>
-              <div class="receipt-row">
-                <span class="label">Cuenta Origen:</span>
-                <span class="val font-mono" id="receiptAccount">******0000</span>
+              <div class="receipt-item">
+                <span class="k">Cuenta Origen:</span>
+                <span class="v font-mono" id="receiptAccount">******0000</span>
               </div>
-              <div class="receipt-row">
-                <span class="label">Fecha y Hora:</span>
-                <span class="val font-mono" id="receiptDateTime">--/--/-- --:--</span>
+              <div class="receipt-item">
+                <span class="k">Fecha / Hora:</span>
+                <span class="v font-mono" id="receiptDateTime">--/--/-- --:--</span>
               </div>
-              <div class="receipt-row">
-                <span class="label">Nº Transacción:</span>
-                <span class="val font-mono" id="receiptTrx">--</span>
+              <div class="receipt-item">
+                <span class="k">Nº Transacción:</span>
+                <span class="v font-mono" id="receiptTrx">--</span>
               </div>
-              <div class="receipt-row">
-                <span class="label">ID de QR:</span>
-                <span class="val font-mono" id="receiptQrId" style="font-size:0.75rem;">--</span>
+              <div class="receipt-item">
+                <span class="k">ID de QR:</span>
+                <span class="v font-mono" id="receiptQrId" style="font-size:0.75rem;">--</span>
               </div>
             </div>
 
-            <div class="receipt-actions-grid">
-              <button class="btn-primary-action" id="btnNewPayment" style="padding:14px;">
+            <div class="receipt-action-buttons">
+              <button class="btn-solid-action" id="btnNewPayment" style="padding:12px;">
                 Nuevo Cobro
               </button>
-              <button class="btn-secondary-action" onclick="window.print()">
+              <button class="btn-secondary-flat" onclick="window.print()">
                 Imprimir Recibo
               </button>
             </div>
@@ -252,8 +235,8 @@
     </div>
   </main>
 
-  <footer class="saas-footer">
-    Plataforma de Pagos QR SaaS &bull; Conexión Oficial con Banco Económico S.A. (Bolivia)
+  <footer class="exec-footer">
+    Terminal de Pagos QR &bull; Integración Oficial Banco Económico S.A.
   </footer>
 
   <script src="app.js"></script>
