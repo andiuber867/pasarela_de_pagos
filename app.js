@@ -1,9 +1,8 @@
 /**
- * Frontend de la Pasarela de Cobros QR
- * Banco Económico - Pagos Simple Interoperables
+ * Frontend SaaS Pasarela de Cobros QR Interoperable
+ * Soporte Multi-Cliente y Escucha en Tiempo Real
  */
 
-// Catálogo de bancos de Bolivia según código ASFI
 const BANCOS_BOLIVIA = {
   '1001': 'Banco Central de Bolivia',
   '1002': 'Banco Nacional de Bolivia (BNB)',
@@ -20,8 +19,8 @@ const BANCOS_BOLIVIA = {
   '1024': 'Banco Prodem'
 };
 
-// Estado de la aplicación
 const state = {
+  selectedClientId: 'default',
   activeQrId: null,
   activeAmount: 0,
   activeDesc: '',
@@ -31,25 +30,30 @@ const state = {
 };
 
 // Elementos del DOM
+const clientSelector = document.getElementById('clientSelector');
+const displayClientName = document.getElementById('displayClientName');
+const displayBusinessName = document.getElementById('displayBusinessName');
+const displayAccountNumber = document.getElementById('displayAccountNumber');
+
 const paymentForm = document.getElementById('paymentForm');
 const amountInput = document.getElementById('amountInput');
 const descInput = document.getElementById('descInput');
 const btnGenerate = document.getElementById('btnGenerate');
-const quickBtns = document.querySelectorAll('.quick-btn');
+const quickChips = document.querySelectorAll('.chip-btn');
 
 // Vistas
 const viewIdle = document.getElementById('viewIdle');
 const viewWaiting = document.getElementById('viewWaiting');
 const viewSuccess = document.getElementById('viewSuccess');
 
-// Elementos de Espera
+// Espera
 const qrImageElement = document.getElementById('qrImageElement');
 const waitingAmount = document.getElementById('waitingAmount');
 const waitingDesc = document.getElementById('waitingDesc');
 const pollCounter = document.getElementById('pollCounter');
 const btnCancelQR = document.getElementById('btnCancelQR');
 
-// Elementos del Recibo
+// Recibo
 const receiptAmount = document.getElementById('receiptAmount');
 const receiptBank = document.getElementById('receiptBank');
 const receiptPayer = document.getElementById('receiptPayer');
@@ -59,29 +63,69 @@ const receiptTrx = document.getElementById('receiptTrx');
 const receiptQrId = document.getElementById('receiptQrId');
 const btnNewPayment = document.getElementById('btnNewPayment');
 
-// Inicialización de eventos
 document.addEventListener('DOMContentLoaded', () => {
-  // Botones de monto rápido
-  quickBtns.forEach(btn => {
+  // Inicializar clientes
+  loadClients();
+
+  // Cambio de cliente
+  if (clientSelector) {
+    clientSelector.addEventListener('change', (e) => {
+      state.selectedClientId = e.target.value;
+      updateClientDisplay(state.selectedClientId);
+    });
+  }
+
+  // Chips de monto rápido
+  quickChips.forEach(btn => {
     btn.addEventListener('click', () => {
       amountInput.value = parseFloat(btn.dataset.val).toFixed(2);
       amountInput.focus();
     });
   });
 
-  // Envío de formulario
+  // Envío del formulario
   paymentForm.addEventListener('submit', handleFormSubmit);
 
-  // Botón cancelar
+  // Acciones de cancelación y nuevo pago
   btnCancelQR.addEventListener('click', cancelPayment);
-
-  // Botón nuevo pago
   btnNewPayment.addEventListener('click', resetToIdle);
 });
 
-/**
- * Cambiar entre vistas de la pasarela
- */
+async function loadClients() {
+  try {
+    const res = await fetch('/api?action=get-clients');
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.clients) {
+        clientSelector.innerHTML = '';
+        data.clients.forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c.id;
+          opt.textContent = `${c.name} (${c.accountMasked})`;
+          clientSelector.appendChild(opt);
+        });
+        updateClientDisplay(clientSelector.value);
+      }
+    }
+  } catch (e) {
+    console.warn('Usando configuración predeterminada de cliente');
+  }
+}
+
+async function updateClientDisplay(clientId) {
+  try {
+    const res = await fetch(`/api?action=client-info&clientId=${clientId}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.client) {
+        displayClientName.textContent = data.client.name;
+        displayBusinessName.textContent = data.client.businessName;
+        displayAccountNumber.textContent = data.client.accountCredit;
+      }
+    }
+  } catch (e) {}
+}
+
 function switchView(viewName) {
   viewIdle.classList.remove('active');
   viewWaiting.classList.remove('active');
@@ -92,9 +136,6 @@ function switchView(viewName) {
   else viewIdle.classList.add('active');
 }
 
-/**
- * Procesar solicitud de nuevo cobro
- */
 async function handleFormSubmit(e) {
   e.preventDefault();
 
@@ -102,42 +143,43 @@ async function handleFormSubmit(e) {
   const description = descInput.value.trim() || 'Cobro por Servicio';
 
   if (!amount || isNaN(amount) || amount <= 0) {
-    alert('Por favor ingresa un monto válido mayor a 0');
+    alert('Ingresa un monto válido mayor a 0');
     return;
   }
 
-  // Activar loader en el botón
   btnGenerate.classList.add('loading');
   btnGenerate.disabled = true;
 
   try {
     const response = await fetch('/api?action=generate', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'X-Client-Id': state.selectedClientId
+      },
       body: JSON.stringify({
         amount: amount,
-        description: description
+        description: description,
+        clientId: state.selectedClientId
       })
     });
 
     const data = await response.json();
 
     if (!response.ok || !data.success) {
-      throw new Error(data.message || 'Error al generar el QR con el banco');
+      throw new Error(data.message || 'Error al generar el QR en el Banco');
     }
 
-    // Configurar estado
     state.activeQrId = data.qrId;
     state.activeAmount = amount;
     state.activeDesc = description;
 
-    // Pintar datos en la vista de espera
     qrImageElement.src = `data:image/png;base64,${data.qrImage}`;
     waitingAmount.textContent = `Bs. ${amount.toFixed(2)}`;
     waitingDesc.textContent = description;
 
     switchView('waiting');
-    startPolling(data.qrId);
+    startPolling(data.qrId, state.selectedClientId);
 
   } catch (error) {
     alert('Error: ' + error.message);
@@ -147,10 +189,7 @@ async function handleFormSubmit(e) {
   }
 }
 
-/**
- * Iniciar el chequeo en tiempo real con el Banco
- */
-function startPolling(qrId) {
+function startPolling(qrId, clientId) {
   stopPolling();
 
   state.pollSeconds = 0;
@@ -161,22 +200,20 @@ function startPolling(qrId) {
     pollCounter.textContent = state.pollSeconds;
   }, 1000);
 
-  // Consulta al banco cada 3 segundos
   state.pollInterval = setInterval(async () => {
     try {
-      const res = await fetch(`/api?action=status&qrId=${qrId}`);
+      const res = await fetch(`/api?action=status&qrId=${qrId}&clientId=${clientId}`);
       if (!res.ok) return;
 
       const data = await res.json();
 
       if (data.success && data.isPaid) {
-        // ¡PAGADO CON ÉXITO!
         stopPolling();
-        triggerSuccessCelebration();
+        triggerConfetti();
         showReceipt(data.payment);
       }
     } catch (err) {
-      console.warn('Fallo momentáneo de verificación de red:', err);
+      console.warn('Verificando conexión...', err);
     }
   }, 3000);
 }
@@ -206,16 +243,12 @@ function resetToIdle() {
   amountInput.focus();
 }
 
-/**
- * Mostrar pantalla de éxito y recibo bancario
- */
 function showReceipt(payment) {
   switchView('success');
 
   const p = payment || {};
   receiptAmount.textContent = (p.amount || state.activeAmount).toFixed(2);
 
-  // Identificar banco emisor
   const bankCode = String(p.senderBankCode || '');
   const bankName = BANCOS_BOLIVIA[bankCode] || (bankCode ? `Banco ASFI ${bankCode}` : 'Banca Móvil Nacional');
   receiptBank.textContent = bankName;
@@ -231,16 +264,13 @@ function showReceipt(payment) {
   receiptQrId.textContent = state.activeQrId || '--';
 }
 
-/**
- * Animación de confeti de victoria
- */
-function triggerSuccessCelebration() {
+function triggerConfetti() {
   if (typeof confetti === 'function') {
     confetti({
-      particleCount: 80,
-      spread: 70,
+      particleCount: 90,
+      spread: 75,
       origin: { y: 0.6 },
-      colors: ['#10b981', '#34d399', '#0066ff', '#ffffff']
+      colors: ['#10b981', '#34d399', '#3b82f6', '#60a5fa', '#ffffff']
     });
   }
 }
